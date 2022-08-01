@@ -1,0 +1,26 @@
+<title>BookOff Search Redirect</title>
+
+<div>
+  This is a placeholder page. If you are using this for the first time, add a browser search with a string like <code>thispage/?q=%s</code>. For details see <a href="https://github.com/polm/bookoff-redirect">here</a>.
+</div>
+
+<script src="encoding.min.js"></script>
+<script>
+  const hext = "0123456789ABCDEF"
+
+  function int2hex(val) {
+      return "%" + hext[Math.floor(val / 16)] + hext[val % 16]
+  }
+  function getQuery(text) {
+      const uu = Encoding.stringToCode(text)
+      const sj = Encoding.convert(uu, {to: "SJIS", from: "UNICODE"})
+      return sj.map(int2hex).join("").replaceAll("%", "%25")
+  }
+
+  const params = new URLSearchParams(window.location.search)
+  const q = params.get("q")
+  if (!q) return
+
+  const baseurl = "https://www.bookoffonline.co.jp/display/L001,st=a,q="
+  window.location.replace(baseurl + getQuery(params.get("q")))
+</script>
